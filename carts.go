@@ -1,6 +1,7 @@
 package prestashop
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"net/http"
@@ -11,43 +12,49 @@ import (
 type CartService service
 
 type ResponseCart struct {
-	Cart  *Cart   `json:"cart,omitempty"`
-	Carts *[]Cart `json:"carts,omitempty"`
+	XMLName  xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
+	Xlink    string   `xml:"xlink,attr" json:"xlink,omitempty"`
+	CartData
+}
+
+type CartData struct {
+	Cart  *Cart   `xml:"cart" json:"cart,omitempty"`
+	Carts *[]Cart `xml:"carts" json:"carts,omitempty"`
 }
 
 type Cart struct {
-	ID                    int               `json:"id,omitempty"`
-	IDAddressDelivery     int               `json:"id_address_delivery,omitempty"`
-	IDAddressInvoice      int               `json:"id_address_invoice,omitempty"`
-	IDCurrency            int               `json:"id_currency,omitempty"`
-	IDCustomer            int               `json:"id_customer,omitempty"`
-	IDGuest               int               `json:"id_guest,omitempty"`
-	IDLang                int               `json:"id_lang,omitempty"`
-	IDShopGroup           int               `json:"id_shop_group,omitempty"`
-	IDShop                int               `json:"id_shop,omitempty"`
-	IDCarrier             int               `json:"id_carrier,omitempty"`
-	Recyclable            string            `json:"recyclable,omitempty"`
-	Gift                  string            `json:"gift,omitempty"`
-	GiftMessage           string            `json:"gift_message,omitempty"`
-	MobileTheme           string            `json:"mobile_theme,omitempty"`
-	DeliveryOption        string            `json:"delivery_option,omitempty"`
-	SecureKey             string            `json:"secure_key,omitempty"`
-	AllowSeperatedPackage string            `json:"allow_seperated_package,omitempty"`
-	DateAdd               string            `json:"date_add,omitempty"`
-	DateUpd               string            `json:"date_upd,omitempty"`
-	Associations          *CartAssociations `json:"associations,omitempty"`
+	ID                    int               `xml:"id" json:"id,omitempty"`
+	IDAddressDelivery     int               `xml:"id_address_delivery" json:"id_address_delivery,omitempty"`
+	IDAddressInvoice      int               `xml:"id_address_invoice" json:"id_address_invoice,omitempty"`
+	IDCurrency            int               `xml:"id_currency" json:"id_currency,omitempty"`
+	IDCustomer            int               `xml:"id_customer" json:"id_customer,omitempty"`
+	IDGuest               int               `xml:"id_guest" json:"id_guest,omitempty"`
+	IDLang                int               `xml:"id_lang" json:"id_lang,omitempty"`
+	IDShopGroup           int               `xml:"id_shop_group" json:"id_shop_group,omitempty"`
+	IDShop                int               `xml:"id_shop" json:"id_shop,omitempty"`
+	IDCarrier             int               `xml:"id_carrier" json:"id_carrier,omitempty"`
+	Recyclable            string            `xml:"recyclable" json:"recyclable,omitempty"`
+	Gift                  string            `xml:"gift" json:"gift,omitempty"`
+	GiftMessage           string            `xml:"gift_message" json:"gift_message,omitempty"`
+	MobileTheme           string            `xml:"mobile_theme" json:"mobile_theme,omitempty"`
+	DeliveryOption        string            `xml:"delivery_option" json:"delivery_option,omitempty"`
+	SecureKey             string            `xml:"secure_key" json:"secure_key,omitempty"`
+	AllowSeperatedPackage string            `xml:"allow_seperated_package" json:"allow_seperated_package,omitempty"`
+	DateAdd               string            `xml:"date_add" json:"date_add,omitempty"`
+	DateUpd               string            `xml:"date_upd" json:"date_upd,omitempty"`
+	Associations          *CartAssociations `xml:"associations" json:"associations,omitempty"`
 }
 
 type CartRows struct {
-	IDProduct          int `json:"id_product,omitempty"`
-	IDProductAttribute int `json:"id_product_attribute,omitempty"`
-	IDAddressDelivery  int `json:"id_address_delivery,omitempty"`
-	IDCustomization    int `json:"id_customization,omitempty"`
-	Quantity           int `json:"quantity,omitempty"`
+	IDProduct          int `xml:"id_product" json:"id_product,omitempty"`
+	IDProductAttribute int `xml:"id_product_attribute" json:"id_product_attribute,omitempty"`
+	IDAddressDelivery  int `xml:"id_address_delivery" json:"id_address_delivery,omitempty"`
+	IDCustomization    int `xml:"id_customization" json:"id_customization,omitempty"`
+	Quantity           int `xml:"quantity" json:"quantity,omitempty"`
 }
 
 type CartAssociations struct {
-	CartRows *[]CartRows `json:"cart_rows,omitempty"`
+	CartRows *[]CartRows `xml:"cart_rows" json:"cart_rows,omitempty"`
 }
 
 func (service *CartService) Get(cartID int, params *ServiceListParams) (*Cart, *http.Response, error) {

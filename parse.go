@@ -7,8 +7,10 @@ import (
 	"strings"
 )
 
+// ListFilterOperator specifies a filter type
 type ListFilterOperator uint8
 
+// ListSortOrder specifies a sort order
 type ListSortOrder uint8
 
 const (
@@ -30,11 +32,11 @@ const (
 	// ListFilterOperatorContains specifies a 'contains' filter type eg. 'filter[field]=%[alu]%'
 	ListFilterOperatorContains ListFilterOperator = 5
 
-	// ListSortOrderAscending specifies a 'ascending ' sort type eg. 'sort=[lastname_ASC]'
-	ListSortOrderAscending     ListSortOrder = 0 
-	
-	// ListSortOrderAscending specifies a 'descending ' sort type eg. 'sort=[lastname_DESC]'
-	ListSortOrderDescending    ListSortOrder = 1 
+	// ListSortOrderAscending specifies a 'ascending ' sort order eg. 'sort=[lastname_ASC]'
+	ListSortOrderAscending     ListSortOrder = 0
+
+	// ListSortOrderAscending specifies a 'descending ' sort order eg. 'sort=[lastname_DESC]'
+	ListSortOrderDescending    ListSortOrder = 1
 )
 
 type ServiceListParams struct {

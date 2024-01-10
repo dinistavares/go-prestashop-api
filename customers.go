@@ -1,6 +1,7 @@
 package prestashop
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"net/http"
@@ -11,53 +12,59 @@ import (
 type CustomersService service
 
 type ResponseCustomer struct {
-	Customer  *Customer   `json:"customer,omitempty"`
-	Customers *[]Customer `json:"customers,omitempty"`
+	XMLName  xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
+	Xlink    string   `xml:"xlink,attr" json:"xlink,omitempty"`
+	CustomerData
+}
+
+type CustomerData struct {
+	Customer  *Customer   `xml:"customer" json:"customer,omitempty"`
+	Customers *[]Customer `xml:"customers" json:"customers,omitempty"`
 }
 
 type Customer struct {
-	ID                       int                   `json:"id,omitempty"`
-	IDDefaultGroup           int                   `json:"id_default_group,omitempty"`
-	IDLang                   int                   `json:"id_lang,omitempty"`
-	NewsletterDateAdd        string                `json:"newsletter_date_add,omitempty"`
-	IPRegistrationNewsletter string                `json:"ip_registration_newsletter,omitempty"`
-	LastPasswdGen            string                `json:"last_passwd_gen,omitempty"`
-	SecureKey                string                `json:"secure_key,omitempty"`
-	Deleted                  string                `json:"deleted,omitempty"`
-	Passwd                   string                `json:"passwd,omitempty"`
-	Lastname                 string                `json:"lastname,omitempty"`
-	Firstname                string                `json:"firstname,omitempty"`
-	Email                    string                `json:"email,omitempty"`
-	IDGender                 int                   `json:"id_gender,omitempty"`
-	Birthday                 string                `json:"birthday,omitempty"`
-	Newsletter               string                `json:"newsletter,omitempty"`
-	Optin                    string                `json:"optin,omitempty"`
-	Website                  string                `json:"website,omitempty"`
-	Company                  string                `json:"company,omitempty"`
-	Siret                    string                `json:"siret,omitempty"`
-	Ape                      string                `json:"ape,omitempty"`
-	OutstandingAllowAmount   string                `json:"outstanding_allow_amount,omitempty"`
-	ShowPublicPrices         string                `json:"show_public_prices,omitempty"`
-	IDRisk                   int                   `json:"id_risk,omitempty"`
-	MaxPaymentDays           int                   `json:"max_payment_days,omitempty"`
-	Active                   string                `json:"active,omitempty"`
-	Note                     string                `json:"note,omitempty"`
-	IsGuest                  string                `json:"is_guest,omitempty"`
-	IDShop                   int                   `json:"id_shop,omitempty"`
-	IDShopGroup              int                   `json:"id_shop_group,omitempty"`
-	DateAdd                  string                `json:"date_add,omitempty"`
-	DateUpd                  string                `json:"date_upd,omitempty"`
-	ResetPasswordToken       string                `json:"reset_password_token,omitempty"`
-	ResetPasswordValidity    string                `json:"reset_password_validity,omitempty"`
-	Associations             *CustomerAssociations `json:"associations,omitempty"`
+	ID                       int                   `xml:"id" json:"id,omitempty"`
+	IDDefaultGroup           int                   `xml:"id_default_group" json:"id_default_group,omitempty"`
+	IDLang                   int                   `xml:"id_lang" json:"id_lang,omitempty"`
+	NewsletterDateAdd        string                `xml:"newsletter_date_add" json:"newsletter_date_add,omitempty"`
+	IPRegistrationNewsletter string                `xml:"ip_registration_newsletter" json:"ip_registration_newsletter,omitempty"`
+	LastPasswdGen            string                `xml:"last_passwd_gen" json:"last_passwd_gen,omitempty"`
+	SecureKey                string                `xml:"secure_key" json:"secure_key,omitempty"`
+	Deleted                  string                `xml:"deleted" json:"deleted,omitempty"`
+	Passwd                   string                `xml:"passwd" json:"passwd,omitempty"`
+	Lastname                 string                `xml:"lastname" json:"lastname,omitempty"`
+	Firstname                string                `xml:"firstname" json:"firstname,omitempty"`
+	Email                    string                `xml:"email" json:"email,omitempty"`
+	IDGender                 int                   `xml:"id_gender" json:"id_gender,omitempty"`
+	Birthday                 string                `xml:"birthday" json:"birthday,omitempty"`
+	Newsletter               string                `xml:"newsletter" json:"newsletter,omitempty"`
+	Optin                    string                `xml:"optin" json:"optin,omitempty"`
+	Website                  string                `xml:"website" json:"website,omitempty"`
+	Company                  string                `xml:"company" json:"company,omitempty"`
+	Siret                    string                `xml:"siret" json:"siret,omitempty"`
+	Ape                      string                `xml:"ape" json:"ape,omitempty"`
+	OutstandingAllowAmount   string                `xml:"outstanding_allow_amount" json:"outstanding_allow_amount,omitempty"`
+	ShowPublicPrices         string                `xml:"show_public_prices" json:"show_public_prices,omitempty"`
+	IDRisk                   int                   `xml:"id_risk" json:"id_risk,omitempty"`
+	MaxPaymentDays           int                   `xml:"max_payment_days" json:"max_payment_days,omitempty"`
+	Active                   string                `xml:"active" json:"active,omitempty"`
+	Note                     string                `xml:"note" json:"note,omitempty"`
+	IsGuest                  string                `xml:"is_guest," json:"is_guest,omitempty"`
+	IDShop                   int                   `xml:"id_shop" json:"id_shop,omitempty"`
+	IDShopGroup              int                   `xml:"id_shop_group" json:"id_shop_group,omitempty"`
+	DateAdd                  string                `xml:"date_add" json:"date_add,omitempty"`
+	DateUpd                  string                `xml:"date_upd" json:"date_upd,omitempty"`
+	ResetPasswordToken       string                `xml:"reset_password_token" json:"reset_password_token,omitempty"`
+	ResetPasswordValidity    string                `xml:"reset_password_validity" json:"reset_password_validity,omitempty"`
+	Associations             *CustomerAssociations `xml:"associations" json:"associations,omitempty"`
 }
 
 type CustomerAssociations struct {
-	Groups []Group `json:"groups,omitempty"`
+	Groups []Group `xml:"groups" json:"groups,omitempty"`
 }
 
 type Group struct {
-	ID int `json:"id,omitempty"`
+	ID int `xml:"groups" json:"id,omitempty"`
 }
 
 func (service *CustomersService) Get(customerID int, params *ServiceListParams) (*Customer, *http.Response, error) {

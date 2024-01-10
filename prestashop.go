@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
@@ -12,9 +13,19 @@ import (
 	"strings"
 	"time"
 )
+// DataOutputType specifies a data output type
+type DataOutputType uint8
 
 const (
-	defautlDataOutputType        = "JSON"
+	// DataOutputTypeXML specifies Output-Format header as 'XML'
+	DataOutputTypeXML      DataOutputType = 0
+
+	// DataOutputTypeJSON specifies Output-Format header as 'JSON'
+	DataOutputTypeJSON     DataOutputType = 1
+)
+
+const (
+	defautlDataOutputType        = DataOutputTypeJSON
 	defaultAuthHeaderName        = "Authorization"
 	acceptedContentType          = "application/json"
 	userAgent                    = "go-prestashop-api/1.1"
@@ -30,7 +41,7 @@ var errorDoAttemptNilRequest = errors.New("request could not be constructed")
 type ClientConfig struct {
 	HttpClient       *http.Client
 	RestEndpointURL  string
-	DataOutputFormat string
+	DataOutputFormat DataOutputType
 }
 
 type auth struct {
@@ -83,6 +94,14 @@ func New(shopURL string) (*Client, error) {
 		RestEndpointURL:  shopURL,
 	}
 
+	return NewWithConfig(&config)
+}
+
+func NewWithConfig(config *ClientConfig) (*Client, error) {
+	if config == nil {
+		return nil, errors.New("configuration is empty")
+	}
+
 	// Create client
 	baseURL, err := url.Parse(config.RestEndpointURL + "/api/")
 
@@ -90,7 +109,7 @@ func New(shopURL string) (*Client, error) {
 		return nil, err
 	}
 
-	client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
+	client := &Client{config: config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
 
 	// Map services
 	client.Customer = &CustomersService{client: client}
@@ -136,7 +155,10 @@ func (client *Client) NewRequest(method, urlStr string, body interface{}) (*http
 	req.Header.Add("Accept", acceptedContentType)
 	req.Header.Add("Content-type", acceptedContentType)
 	req.Header.Add("User-Agent", userAgent)
-	req.Header.Add("Output-Format", client.config.DataOutputFormat)
+
+	if client.config.DataOutputFormat == DataOutputTypeJSON {
+		req.Header.Add("Output-Format", "JSON")
+	}
 
 	return req, nil
 }
@@ -197,9 +219,17 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			err = json.NewDecoder(resp.Body).Decode(v)
-			if err == io.EOF {
-				err = nil
+			if client.config.DataOutputFormat == DataOutputTypeJSON {
+				err = json.NewDecoder(resp.Body).Decode(v)
+				if err == io.EOF {
+					err = nil
+				}
+			} else {
+				err = xml.NewDecoder(resp.Body).Decode(v)
+				if err == io.EOF {
+					err = nil
+				}
+				
 			}
 		}
 	}
