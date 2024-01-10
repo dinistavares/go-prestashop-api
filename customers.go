@@ -106,3 +106,41 @@ func (service *CustomersService) List(params *ServiceListParams) (*[]Customer, *
 
 	return customers.Customers, response, nil
 }
+
+func (service *CustomersService) GetCustomersByEmail(customerEmail string, params *ServiceListParams) (*Customer, *http.Response, error) {
+	searchLimit := 1
+
+	searchParams := ServiceListParams{
+		Display: &ServiceListDisplay{
+			"full",
+		},
+		Filter: &ServiceListFilter{
+			Key: "email",
+			Values: []string{customerEmail},
+			Operator: ListFilterOperatorLiteral,
+		},
+		Limit: &ServiceListLimit{
+			Limit: &searchLimit,
+		},
+		// Set defined sort params
+		Sort: params.Sort,
+	}
+
+	// Override display params
+	if params.Display != nil {
+		searchParams.Display = params.Display
+	}
+
+	customer := new(Customer)
+	customers, response, err := service.List(&searchParams)
+
+	if err != nil {
+		return nil, response, err
+	}
+
+	if customers != nil && len(*customers) > 0 {
+		customer = &(*customers)[0]
+	}
+
+	return customer, response, err
+}
