@@ -46,6 +46,7 @@ type Client struct {
 
 	Customer *CustomersService
 	Cart     *CartService
+	Order     *OrderService
 }
 
 type service struct {
@@ -93,6 +94,7 @@ func New(shopURL string) (*Client, error) {
 	// Map services
 	client.Customer = &CustomersService{client: client}
 	client.Cart = &CartService{client: client}
+	client.Order = &OrderService{client: client}
 
 	return client, nil
 }
