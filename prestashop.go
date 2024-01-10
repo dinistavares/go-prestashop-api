@@ -46,7 +46,8 @@ type Client struct {
 
 	Customer *CustomersService
 	Cart     *CartService
-	Order     *OrderService
+	Order    *OrderService
+	Product  *ProductService
 }
 
 type service struct {
@@ -95,6 +96,7 @@ func New(shopURL string) (*Client, error) {
 	client.Customer = &CustomersService{client: client}
 	client.Cart = &CartService{client: client}
 	client.Order = &OrderService{client: client}
+	client.Product = &ProductService{client: client}
 
 	return client, nil
 }
