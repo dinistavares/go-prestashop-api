@@ -44,7 +44,8 @@ type Client struct {
 	auth    *auth
 	baseURL *url.URL
 
-	Customers *CustomersService
+	Customer *CustomersService
+	Cart     *CartService
 }
 
 type service struct {
@@ -90,7 +91,8 @@ func New(shopURL string) (*Client, error) {
 	client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
 
 	// Map services
-	client.Customers = &CustomersService{client: client}
+	client.Customer = &CustomersService{client: client}
+	client.Cart = &CartService{client: client}
 
 	return client, nil
 }
