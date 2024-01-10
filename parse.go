@@ -12,15 +12,29 @@ type ListFilterOperator uint8
 type ListSortOrder uint8
 
 const (
-	ListFilterOperatorOr       ListFilterOperator = 0 // "[|]"
-	ListFilterOperatorInterval ListFilterOperator = 1 // "[,]"
-	ListFilterOperatorLiteral  ListFilterOperator = 2 // "[]"
-	ListFilterOperatorBegin    ListFilterOperator = 3 // "[]%"
-	ListFilterOperatorEnd      ListFilterOperator = 4 // "[]%"
-	ListFilterOperatorContains ListFilterOperator = 5 // "[]%"
+	// ListFilterOperatorOr specifies an 'or' filter type eg. 'filter[id]=[1|5]' = (returns values with id's 1 OR 5)
+	ListFilterOperatorOr       ListFilterOperator = 0
 
-	ListSortOrderAscending  ListSortOrder = 0 //ASC
-	ListSortOrderDescending ListSortOrder = 1 //DESC
+	// ListFilterOperatorInterval specifies an 'interval' filter type eg. 'filter[id]=[1,5]' = (returns values id's 1 through 5)
+	ListFilterOperatorInterval ListFilterOperator = 1
+
+	// ListFilterOperatorLiteral specifies a 'literal' filter type eg. 'filter[field]=[value]'
+	ListFilterOperatorLiteral  ListFilterOperator = 2
+
+	// ListFilterOperatorBegin specifies a 'begin' filter type eg. 'filter[field]=[val]%'
+	ListFilterOperatorBegin    ListFilterOperator = 3
+
+	// ListFilterOperatorEnd specifies an 'end' filter type eg. 'filter[field]=%[ue]'
+	ListFilterOperatorEnd      ListFilterOperator = 4
+
+	// ListFilterOperatorContains specifies a 'contains' filter type eg. 'filter[field]=%[alu]%'
+	ListFilterOperatorContains ListFilterOperator = 5
+
+	// ListSortOrderAscending specifies a 'ascending ' sort type eg. 'sort=[lastname_ASC]'
+	ListSortOrderAscending     ListSortOrder = 0 
+	
+	// ListSortOrderAscending specifies a 'descending ' sort type eg. 'sort=[lastname_DESC]'
+	ListSortOrderDescending    ListSortOrder = 1 
 )
 
 type ServiceListParams struct {
