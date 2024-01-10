@@ -12,8 +12,8 @@ import (
 type CartService service
 
 type ResponseCart struct {
-	XMLName  xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
-	Xlink    string   `xml:"xlink,attr" json:"xlink,omitempty"`
+	XMLName xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
+	Xlink   string   `xml:"xlink,attr" json:"xlink,omitempty"`
 	CartData
 }
 

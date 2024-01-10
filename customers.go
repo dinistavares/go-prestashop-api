@@ -12,8 +12,8 @@ import (
 type CustomersService service
 
 type ResponseCustomer struct {
-	XMLName  xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
-	Xlink    string   `xml:"xlink,attr" json:"xlink,omitempty"`
+	XMLName xml.Name `xml:"prestashop" json:"prestashop,omitempty"`
+	Xlink   string   `xml:"xlink,attr" json:"xlink,omitempty"`
 	CustomerData
 }
 
