@@ -172,32 +172,3 @@ func (service *ProductService) List(params *ServiceListParams) (*[]Product, *htt
 
 	return products.Products, response, nil
 }
-
-// func (service *ProductService) GetProductssByCustomerID(customerID int, params *ServiceListParams) (*[]Product, *http.Response, error) {
-// 	searchParams := ServiceListParams{
-// 		Display: &ServiceListDisplay{
-// 			"full",
-// 		},
-// 		Filter: &ServiceListFilter{
-// 			Key:      "id_customer",
-// 			Values:   []string{fmt.Sprintf("%d", customerID)},
-// 			Operator: ListFilterOperatorLiteral,
-// 		},
-// 		// Set defined sort and limit params
-// 		Limit: params.Limit,
-// 		Sort:  params.Sort,
-// 	}
-
-// 	// Override display params
-// 	if params.Display != nil {
-// 		searchParams.Display = params.Display
-// 	}
-
-// 	products, response, err := service.List(&searchParams)
-
-// 	if err != nil {
-// 		return nil, response, err
-// 	}
-
-// 	return products, response, err
-// }
