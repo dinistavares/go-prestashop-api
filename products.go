@@ -173,7 +173,7 @@ func (service *ProductService) List(params *ServiceListParams) (*[]Product, *htt
 		return nil, response, err
 	}
 
-	if productsResponse != nil && productsResponse.ProductsData.Products != nil &&
+	if productsResponse != nil && productsResponse.ProductsData != nil &&
 		productsResponse.ProductsData.Products != nil {
 		products = productsResponse.ProductsData.Products
 	}
