@@ -75,7 +75,7 @@ func (response *errorResponse) Error() string {
 	if response.Errors == nil && response.RawError != "" {
 		errorNew := Error{
 			Message: response.RawError,
-			Code: -1,
+			Code:    -1,
 		}
 
 		response.Errors = append(response.Errors, ErrorData{Errors: []Error{errorNew}})
@@ -84,7 +84,6 @@ func (response *errorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %+v",
 		response.Response.Request.Method, response.Response.Request.URL,
 		response.Response.StatusCode, response.Errors)
-
 }
 
 func New(shopURL string) (*Client, error) {
