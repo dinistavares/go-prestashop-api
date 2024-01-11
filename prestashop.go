@@ -27,8 +27,8 @@ var errorDoAllAttemptsExhausted = errors.New("all request attempts were exhauste
 var errorDoAttemptNilRequest = errors.New("request could not be constructed")
 
 type ClientConfig struct {
-	HttpClient       *http.Client
-	RestEndpointURL  string
+	HttpClient      *http.Client
+	RestEndpointURL string
 }
 
 type auth struct {
@@ -59,11 +59,11 @@ type errorResponse struct {
 	Response *http.Response
 	RawError string
 
-	Errors []Errors `xml:"errors" json:"errors"`
+	Errors []ErrorData `xml:"errors" json:"errors"`
 }
 
-type Errors struct {
-	Error 	[]Error `xml:"error"`
+type ErrorData struct {
+	Errors []Error `xml:"error"`
 }
 
 type Error struct {
@@ -72,9 +72,19 @@ type Error struct {
 }
 
 func (response *errorResponse) Error() string {
+	if response.Errors == nil && response.RawError != "" {
+		errorNew := Error{
+			Message: response.RawError,
+			Code: -1,
+		}
+
+		response.Errors = append(response.Errors, ErrorData{Errors: []Error{errorNew}})
+	}
+
 	return fmt.Sprintf("%v %v: %d %+v",
 		response.Response.Request.Method, response.Response.Request.URL,
 		response.Response.StatusCode, response.Errors)
+
 }
 
 func New(shopURL string) (*Client, error) {
@@ -83,8 +93,8 @@ func New(shopURL string) (*Client, error) {
 	}
 
 	config := ClientConfig{
-		HttpClient:       http.DefaultClient,
-		RestEndpointURL:  shopURL,
+		HttpClient:      http.DefaultClient,
+		RestEndpointURL: shopURL,
 	}
 
 	return NewWithConfig(&config)
@@ -244,6 +254,8 @@ func checkResponse(response *http.Response) error {
 	if err == nil && data != nil {
 		xml.Unmarshal(data, errorResponse)
 	}
+
+	errorResponse.RawError = string(data)
 
 	return errorResponse
 }
