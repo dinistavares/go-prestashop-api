@@ -55,7 +55,6 @@ func (client *prestashop.Client) listOrders() {
 
 
   // ....
-
 }
 
 ```
@@ -82,7 +81,6 @@ func (client *prestashop.Client) listOrders() {
 
 
   // ....
-
 }
 
 ```
@@ -116,7 +114,6 @@ func (client *prestashop.Client) listOrders() {
 
 
   // ....
-
 }
 
 ```
