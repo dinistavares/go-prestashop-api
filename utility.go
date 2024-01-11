@@ -11,3 +11,15 @@ func makeResourceUrl(route string, listParams *ServiceListParams) string {
 
 	return _url
 }
+
+func setDefaultResourceByIDDisplayParams(params *ServiceListParams) *ServiceListParams {
+	if params == nil {
+		params = &ServiceListParams{}
+	}
+
+	if params.Display == nil {
+		params.Display = &ServiceListDisplay{"full"}
+	}
+
+	return params
+}

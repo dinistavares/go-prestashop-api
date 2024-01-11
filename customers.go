@@ -91,6 +91,7 @@ func (service *CustomersService) Create(customer *Customer) (*Customer, *http.Re
 }
 
 func (service *CustomersService) Get(customerID int, params *ServiceListParams) (*Customer, *http.Response, error) {
+	params = setDefaultResourceByIDDisplayParams(params)
 	resourceRoute := fmt.Sprintf("customers/%d", customerID)
 
 	_url := makeResourceUrl(resourceRoute, params)

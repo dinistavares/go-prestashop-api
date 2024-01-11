@@ -117,6 +117,7 @@ func (service *OrderService) Create(order *Order) (*Order, *http.Response, error
 }
 
 func (service *OrderService) Get(orderID int, params *ServiceListParams) (*Order, *http.Response, error) {
+	params = setDefaultResourceByIDDisplayParams(params)
 	resourceRoute := fmt.Sprintf("orders/%d", orderID)
 
 	_url := makeResourceUrl(resourceRoute, params)

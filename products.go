@@ -157,6 +157,7 @@ func (service *ProductService) Create(product *Product) (*Product, *http.Respons
 }
 
 func (service *ProductService) Get(productID int, params *ServiceListParams) (*Product, *http.Response, error) {
+	params = setDefaultResourceByIDDisplayParams(params)
 	resourceRoute := fmt.Sprintf("products/%d", productID)
 
 	_url := makeResourceUrl(resourceRoute, params)

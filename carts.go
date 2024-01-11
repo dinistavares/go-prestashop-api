@@ -81,6 +81,7 @@ func (service *CartService) Create(cart *Cart) (*Cart, *http.Response, error) {
 }
 
 func (service *CartService) Get(cartID int, params *ServiceListParams) (*Cart, *http.Response, error) {
+	params = setDefaultResourceByIDDisplayParams(params)
 	resourceRoute := fmt.Sprintf("carts/%d", cartID)
 
 	_url := makeResourceUrl(resourceRoute, params)
