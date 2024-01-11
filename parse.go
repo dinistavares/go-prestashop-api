@@ -165,8 +165,16 @@ func parseServiceListLimit(limit ServiceListLimit) string {
 func parseUrlListParameters(params *ServiceListParams) string {
 	var listParamString []string
 
+	// Should always include parameters
 	if params == nil {
-		return ""
+		params = &ServiceListParams{}
+	}
+
+	// Should always incude at least the ID of listed resource
+	if params.Display == nil {
+		params.Display = &ServiceListDisplay{
+			"id",
+		}
 	}
 
 	if params.Display != nil {

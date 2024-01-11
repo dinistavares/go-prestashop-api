@@ -3,7 +3,6 @@ package prestashop
 import (
 	"bytes"
 	"encoding/base64"
-	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
@@ -13,21 +12,10 @@ import (
 	"strings"
 	"time"
 )
-// DataOutputType specifies a data output type
-type DataOutputType uint8
 
 const (
-	// DataOutputTypeXML specifies Output-Format header as 'XML'
-	DataOutputTypeXML      DataOutputType = 0
-
-	// DataOutputTypeJSON specifies Output-Format header as 'JSON'
-	DataOutputTypeJSON     DataOutputType = 1
-)
-
-const (
-	defautlDataOutputType        = DataOutputTypeJSON
 	defaultAuthHeaderName        = "Authorization"
-	acceptedContentType          = "application/json"
+	acceptedContentType          = "application/xml"
 	userAgent                    = "go-prestashop-api/1.1"
 	clientRequestRetryAttempts   = 2
 	clientRequestRetryHoldMillis = 1000
@@ -41,7 +29,6 @@ var errorDoAttemptNilRequest = errors.New("request could not be constructed")
 type ClientConfig struct {
 	HttpClient       *http.Client
 	RestEndpointURL  string
-	DataOutputFormat DataOutputType
 }
 
 type auth struct {
@@ -66,15 +53,22 @@ type service struct {
 }
 
 type errorResponse struct {
+	XMLName xml.Name `xml:"prestashop"`
+	Xlink   string   `xml:"xlink,attr"`
+
 	Response *http.Response
 	RawError string
 
-	Errors []Errors `json:"errors"`
+	Errors []Errors `xml:"errors" json:"errors"`
 }
 
 type Errors struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Error 	[]Error `xml:"error"`
+}
+
+type Error struct {
+	Code    int    `xml:"code" json:"code"`
+	Message string `xml:"message" json:"message"`
 }
 
 func (response *errorResponse) Error() string {
@@ -90,7 +84,6 @@ func New(shopURL string) (*Client, error) {
 
 	config := ClientConfig{
 		HttpClient:       http.DefaultClient,
-		DataOutputFormat: defautlDataOutputType,
 		RestEndpointURL:  shopURL,
 	}
 
@@ -140,7 +133,7 @@ func (client *Client) NewRequest(method, urlStr string, body interface{}) (*http
 	if body != nil {
 		buf = new(bytes.Buffer)
 
-		err := json.NewEncoder(buf).Encode(body)
+		err := xml.NewEncoder(buf).Encode(body)
 		if err != nil {
 			return nil, err
 		}
@@ -152,13 +145,9 @@ func (client *Client) NewRequest(method, urlStr string, body interface{}) (*http
 	}
 
 	req.Header.Add(client.auth.HeaderName, client.auth.ApiKey)
+	req.Header.Add("User-Agent", userAgent)
 	req.Header.Add("Accept", acceptedContentType)
 	req.Header.Add("Content-type", acceptedContentType)
-	req.Header.Add("User-Agent", userAgent)
-
-	if client.config.DataOutputFormat == DataOutputTypeJSON {
-		req.Header.Add("Output-Format", "JSON")
-	}
 
 	return req, nil
 }
@@ -219,17 +208,9 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
 		} else {
-			if client.config.DataOutputFormat == DataOutputTypeJSON {
-				err = json.NewDecoder(resp.Body).Decode(v)
-				if err == io.EOF {
-					err = nil
-				}
-			} else {
-				err = xml.NewDecoder(resp.Body).Decode(v)
-				if err == io.EOF {
-					err = nil
-				}
-				
+			err = xml.NewDecoder(resp.Body).Decode(v)
+			if err == io.EOF {
+				err = nil
 			}
 		}
 	}
@@ -239,8 +220,8 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
 
 // checkRequestRetry checks if should retry request
 func checkRequestRetry(response *http.Response, err error) bool {
-	// Low-level error, or response status is a server error? (HTTP 5xx)
-	if err != nil || response.StatusCode >= 500 {
+	// Low-level error
+	if err != nil {
 		return true
 	}
 
@@ -261,7 +242,7 @@ func checkResponse(response *http.Response) error {
 	data, err := io.ReadAll(response.Body)
 
 	if err == nil && data != nil {
-		json.Unmarshal(data, errorResponse)
+		xml.Unmarshal(data, errorResponse)
 	}
 
 	return errorResponse
