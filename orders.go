@@ -165,7 +165,7 @@ func (service *OrderService) List(params *ServiceListParams) (*[]Order, *http.Re
 	return orders, response, nil
 }
 
-func (service *OrderService) GetOrdersByCustomerID(customerID int, params *ServiceListParams) (*[]Order, *http.Response, error) {
+func (service *OrderService) ListOrdersByCustomerID(customerID int, params *ServiceListParams) (*[]Order, *http.Response, error) {
 	searchParams := ServiceListParams{
 		Display: &ServiceListDisplay{
 			"full",

@@ -130,7 +130,7 @@ func (service *CartService) List(params *ServiceListParams) (*[]Cart, *http.Resp
 	return carts, response, nil
 }
 
-func (service *CartService) GetCartsByCustomerID(customerID int, params *ServiceListParams) (*[]Cart, *http.Response, error) {
+func (service *CartService) ListCartsByCustomerID(customerID int, params *ServiceListParams) (*[]Cart, *http.Response, error) {
 	searchParams := ServiceListParams{
 		Display: &ServiceListDisplay{
 			"full",
