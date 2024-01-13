@@ -1,11 +1,5 @@
 package prestashop
 
-type LanguageData struct {
-	ID       string `xml:"id" json:"id,omitempty"`
-	Href     string `xml:"href" json:"href,omitempty"`
-	Language string `xml:"language,omitempty" json:"language,omitempty"`
-}
-
 func makeResourceUrl(route string, listParams *ServiceListParams) string {
 	_url := route
 

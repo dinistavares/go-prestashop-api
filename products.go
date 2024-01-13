@@ -52,8 +52,8 @@ type Product struct {
 	IsVirtual               string               `xml:"is_virtual,omitempty" json:"is_virtual,omitempty"`
 	State                   int                  `xml:"state,omitempty" json:"state,omitempty"`
 	AdditionalDeliveryTimes int                  `xml:"additional_delivery_times,omitempty" json:"additional_delivery_times,omitempty"`
-	DeliveryInStock         *LanguageData        `xml:"delivery_in_stock,omitempty" json:"delivery_in_stock,omitempty"`
-	DeliveryOutStock        *LanguageData        `xml:"delivery_out_stock,omitempty" json:"delivery_out_stock,omitempty"`
+	DeliveryInStock         *ProductLanguageData `xml:"delivery_in_stock,omitempty" json:"delivery_in_stock,omitempty"`
+	DeliveryOutStock        *ProductLanguageData `xml:"delivery_out_stock,omitempty" json:"delivery_out_stock,omitempty"`
 	ProductType             string               `xml:"product_type,omitempty" json:"product_type,omitempty"`
 	OnSale                  string               `xml:"on_sale,omitempty" json:"on_sale,omitempty"`
 	OnlineOnly              string               `xml:"online_only,omitempty" json:"online_only,omitempty"`
@@ -84,16 +84,26 @@ type Product struct {
 	DateAdd                 string               `xml:"date_add,omitempty" json:"date_add,omitempty"`
 	DateUpd                 string               `xml:"date_upd,omitempty" json:"date_upd,omitempty"`
 	PackStockType           int                  `xml:"pack_stock_type,omitempty" json:"pack_stock_type,omitempty"`
-	MetaDescription         *LanguageData        `xml:"meta_description,omitempty" json:"meta_description,omitempty"`
-	MetaKeywords            *LanguageData        `xml:"meta_keywords,omitempty" json:"meta_keywords,omitempty"`
-	MetaTitle               *LanguageData        `xml:"meta_title,omitempty" json:"meta_title,omitempty"`
-	LinkRewrite             *LanguageData        `xml:"link_rewrite,omitempty" json:"link_rewrite,omitempty"`
-	Name                    *LanguageData        `xml:"name,omitempty" json:"name,omitempty"`
-	Description             *LanguageData        `xml:"description,omitempty" json:"description,omitempty"`
-	DescriptionShort        *LanguageData        `xml:"description_short,omitempty" json:"description_short,omitempty"`
-	AvailableNow            *LanguageData        `xml:"available_now,omitempty" json:"available_now,omitempty"`
-	AvailableLater          *LanguageData        `xml:"available_later,omitempty" json:"available_later,omitempty"`
+	MetaDescription         *ProductLanguageData `xml:"meta_description,omitempty" json:"meta_description,omitempty"`
+	MetaKeywords            *ProductLanguageData `xml:"meta_keywords,omitempty" json:"meta_keywords,omitempty"`
+	MetaTitle               *ProductLanguageData `xml:"meta_title,omitempty" json:"meta_title,omitempty"`
+	LinkRewrite             *ProductLanguageData `xml:"link_rewrite,omitempty" json:"link_rewrite,omitempty"`
+	Name                    *ProductLanguageData `xml:"name,omitempty" json:"name,omitempty"`
+	Description             *ProductLanguageData `xml:"description,omitempty" json:"description,omitempty"`
+	DescriptionShort        *ProductLanguageData `xml:"description_short,omitempty" json:"description_short,omitempty"`
+	AvailableNow            *ProductLanguageData `xml:"available_now,omitempty" json:"available_now,omitempty"`
+	AvailableLater          *ProductLanguageData `xml:"available_later,omitempty" json:"available_later,omitempty"`
 	Associations            *ProductAssociations `xml:"associations,omitempty" json:"associations,omitempty"`
+}
+
+type ProductLanguageData struct {
+	Language *[]ProductLanguage `xml:"language,omitempty" json:"language,omitempty"`
+}
+
+type ProductLanguage struct {
+	ID   string `xml:"id,attr" json:"id,omitempty"`
+	Href string `xml:"href,attr" json:"href,omitempty"`
+	Text string `xml:",chardata" json:"text,omitempty"`
 }
 
 type Categories struct {
