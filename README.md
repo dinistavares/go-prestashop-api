@@ -12,6 +12,7 @@ $ go get github.com/dinistavares/go-prestashop-api
 
 Create a new API client and authenticate with your Webservice key. You should specify the URL protocol by prefixing your domain name with `https://` or `http://`. Follow the [Prestashop documentation](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/) to enable the webservice [through the Prestashop user interface](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/#via-the-user-interface) or [programmatically](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/#programmatically) then create your API keys through the [Prestashop user interface](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/#via-the-user-interface-1) or [programmatically](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/#programatically).
 
+## Authenticate
 ```go
 import (
   "github.com/dinistavares/go-prestashop-api"
@@ -33,6 +34,8 @@ func main(){
 }
 
 ```
+
+## Resources
 
 The API routes are broken down into services, the supported services are:
 
@@ -116,4 +119,105 @@ func (client *prestashop.Client) listOrders() {
   // ....
 }
 
+```
+
+## XML Support
+
+```go
+func (client *prestashop.Client) listOrders() {
+  params := &prestashop.ServiceListParams{
+    Display: &prestashop.ServiceListDisplay{
+      "id",
+      "name",
+      "price",
+    },
+  }
+
+  product, _, err := client.Product.Get(1, params)
+
+  if err != nil {
+    // Handle error
+
+    return
+  }
+
+  if product != nil {
+    productXML, _ := xml.Marshal(*product)
+    fmt.Print(string(productXML))
+  } else {
+    // Hanlde no product found
+  }
+
+
+  // ....
+}
+
+```
+
+Result: 
+```xml
+<Product>
+    <id>1</id>
+    <price>23.900000</price>
+    <name>
+        <language id="1" href="https://crisp-plugin-dinis.ngrok.io/api/languages/1">Hummingbird printed t-shirt</language>
+        <language id="2" href="https://crisp-plugin-dinis.ngrok.io/api/languages/3">تيشيرت بطبعة الطائر الطنان</language>
+    </name>
+</Product>
+```
+
+## JSON Support
+
+
+```go
+func (client *prestashop.Client) listOrders() {
+  params := &prestashop.ServiceListParams{
+    Display: &prestashop.ServiceListDisplay{
+      "id",
+      "name",
+      "price",
+    },
+  }
+
+  product, _, err := client.Product.Get(1, params)
+
+  if err != nil {
+    // Handle error
+
+    return
+  }
+
+  if product != nil {
+    productJSON, _ := json.Marshal(*product)
+    fmt.Print(string(productJSON))
+  } else {
+    // Hanlde no product found
+  }
+
+
+  // ....
+}
+
+```
+
+Result: 
+```json
+{
+  "id": 1,
+  "price": "23.900000",
+  "name": {
+    "language": [
+      {
+        "id": "1",
+        "href": "https://crisp-plugin-dinis.ngrok.io/api/languages/1",
+        "text": "Hummingbird printed t-shirt"
+      },
+      {
+        "id": "2",
+        "href": "https://crisp-plugin-dinis.ngrok.io/api/languages/3",
+        "text": "تيشيرت بطبعة الطائر الطنان"
+      }
+    ]
+  }
+}
 ```
