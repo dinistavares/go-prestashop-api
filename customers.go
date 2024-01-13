@@ -30,8 +30,8 @@ type Customer struct {
 	SecureKey                string                `xml:"secure_key,omitempty" json:"secure_key,omitempty"`
 	Deleted                  string                `xml:"deleted,omitempty" json:"deleted,omitempty"`
 	Passwd                   string                `xml:"passwd,omitempty" json:"passwd,omitempty"`
-	Lastname                 string                `xml:"lastname,omitempty" json:"lastname,omitempty"`
-	Firstname                string                `xml:"firstname,omitempty" json:"firstname,omitempty"`
+	Lastname                 string                `xml:"lastname,omitempty" json:"last_name,omitempty"`
+	Firstname                string                `xml:"firstname,omitempty" json:"first_name,omitempty"`
 	Email                    string                `xml:"email,omitempty" json:"email,omitempty"`
 	IDGender                 int                   `xml:"id_gender,omitempty" json:"id_gender,omitempty"`
 	Birthday                 string                `xml:"birthday,omitempty" json:"birthday,omitempty"`
