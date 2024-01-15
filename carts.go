@@ -43,7 +43,7 @@ type Cart struct {
 	Associations          *CartAssociations `xml:"associations,omitempty" json:"associations,omitempty"`
 }
 
-type CartRows struct {
+type CartRow struct {
 	IDProduct          int `xml:"id_product,omitempty" json:"id_product,omitempty"`
 	IDProductAttribute int `xml:"id_product_attribute,omitempty" json:"id_product_attribute,omitempty"`
 	IDAddressDelivery  int `xml:"id_address_delivery,omitempty" json:"id_address_delivery,omitempty"`
@@ -53,6 +53,10 @@ type CartRows struct {
 
 type CartAssociations struct {
 	CartRows *[]CartRows `xml:"cart_rows,omitempty" json:"cart_rows,omitempty"`
+}
+
+type CartRows struct {
+	CartRow []CartRow `xml:"cart_row" json:"cart_row,omitempty"`
 }
 
 func (service *CartService) Create(cart *Cart) (*Cart, *http.Response, error) {
