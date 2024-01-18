@@ -37,7 +37,7 @@ type Order struct {
 	DeliveryDate          string             `xml:"delivery_date,omitempty" json:"delivery_date,omitempty"`
 	Valid                 string             `xml:"valid,omitempty" json:"valid,omitempty"`
 	DateAdd               string             `xml:"date_add,omitempty" json:"date_add,omitempty"`
-	DateUpd               string             `xml:"date_upd,omitempty" json:"date_upd,omitempty"`
+	DateUpdated           string             `xml:"date_upd,omitempty" json:"date_updated,omitempty"`
 	ShippingNumber        string             `xml:"shipping_number,omitempty" json:"shipping_number,omitempty"`
 	Note                  string             `xml:"note,omitempty" json:"note,omitempty"`
 	IDShopGroup           int                `xml:"id_shop_group,omitempty" json:"id_shop_group,omitempty"`
@@ -71,7 +71,7 @@ type Order struct {
 	Associations          *OrderAssociations `xml:"associations,omitempty" json:"associations,omitempty"`
 }
 
-type OrderRows struct {
+type OrderRow struct {
 	ID                 int    `xml:"id,omitempty" json:"id,omitempty"`
 	ProductID          int    `xml:"product_id,omitempty" json:"product_id,omitempty"`
 	ProductAttributeID int    `xml:"product_attribute_id,omitempty" json:"product_attribute_id,omitempty"`
@@ -88,7 +88,7 @@ type OrderRows struct {
 }
 
 type OrderAssociations struct {
-	OrderRows *[]OrderRows `xml:"order_rows,omitempty" json:"order_rows,omitempty"`
+	OrderRows *[]OrderRow `xml:"order_rows>order_row,omitempty" json:"order_rows,omitempty"`
 }
 
 func (service *OrderService) Create(order *Order) (*Order, *http.Response, error) {
@@ -176,14 +176,23 @@ func (service *OrderService) ListOrdersByCustomerID(customerID int, params *Serv
 			Values:   []string{fmt.Sprintf("%d", customerID)},
 			Operator: ListFilterOperatorLiteral,
 		},
-		// Set defined sort and limit params
-		Limit: params.Limit,
-		Sort:  params.Sort,
 	}
 
-	// Override display params
-	if params.Display != nil {
-		searchParams.Display = params.Display
+	if params != nil {
+		// Override display params
+		if params.Display != nil {
+			searchParams.Display = params.Display
+		}
+
+		// Set limits if defined
+		if params.Limit != nil {
+			searchParams.Limit = params.Limit
+		}
+
+		// Set sort order if defined
+		if params.Sort != nil {
+			searchParams.Sort = params.Sort
+		}
 	}
 
 	orders, response, err := service.List(&searchParams)
