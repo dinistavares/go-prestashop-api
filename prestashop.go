@@ -43,6 +43,7 @@ type Client struct {
 	baseURL *url.URL
 
 	Carrier  *CarrierService
+	Currency *CurrencyService
 	Customer *CustomersService
 	Cart     *CartService
 	Order    *OrderService
@@ -116,6 +117,7 @@ func NewWithConfig(config *ClientConfig) (*Client, error) {
 
 	// Map services
 	client.Carrier = &CarrierService{client: client}
+	client.Currency = &CurrencyService{client: client}
 	client.Customer = &CustomersService{client: client}
 	client.Cart = &CartService{client: client}
 	client.Order = &OrderService{client: client}
