@@ -33,7 +33,7 @@ type Product struct {
 	IDCategoryDefault       int                  `xml:"id_category_default,omitempty" json:"id_category_default,omitempty"`
 	New                     interface{}          `xml:"new,omitempty" json:"new,omitempty"`
 	CacheDefaultAttribute   int                  `xml:"cache_default_attribute,omitempty" json:"cache_default_attribute,omitempty"`
-	DefaultImage          	*DefaultImage    	   `xml:"id_default_image,omitempty" json:"id_default_image,omitempty"`
+	DefaultImage            *DefaultImage        `xml:"id_default_image,omitempty" json:"id_default_image,omitempty"`
 	IDDefaultCombination    int                  `xml:"id_default_combination,omitempty" json:"id_default_combination,omitempty"`
 	IDTaxRulesGroup         int                  `xml:"id_tax_rules_group,omitempty" json:"id_tax_rules_group,omitempty"`
 	PositionInCategory      int                  `xml:"position_in_category,omitempty" json:"position_in_category,omitempty"`
@@ -44,10 +44,10 @@ type Product struct {
 	Reference               string               `xml:"reference,omitempty" json:"reference,omitempty"`
 	SupplierReference       string               `xml:"supplier_reference,omitempty" json:"supplier_reference,omitempty"`
 	Location                string               `xml:"location,omitempty" json:"location,omitempty"`
-	Width                   string               `xml:"width,omitempty" json:"width,omitempty"`
-	Height                  string               `xml:"height,omitempty" json:"height,omitempty"`
-	Depth                   string               `xml:"depth,omitempty" json:"depth,omitempty"`
-	Weight                  string               `xml:"weight,omitempty" json:"weight,omitempty"`
+	Width                   float64              `xml:"width,omitempty" json:"width,omitempty"`
+	Height                  float64              `xml:"height,omitempty" json:"height,omitempty"`
+	Depth                   float64              `xml:"depth,omitempty" json:"depth,omitempty"`
+	Weight                  float64              `xml:"weight,omitempty" json:"weight,omitempty"`
 	QuantityDiscount        string               `xml:"quantity_discount,omitempty" json:"quantity_discount,omitempty"`
 	Ean13                   string               `xml:"ean13,omitempty" json:"ean13,omitempty"`
 	Isbn                    string               `xml:"isbn,omitempty" json:"isbn,omitempty"`
@@ -63,16 +63,16 @@ type Product struct {
 	ProductType             string               `xml:"product_type,omitempty" json:"product_type,omitempty"`
 	OnSale                  string               `xml:"on_sale,omitempty" json:"on_sale,omitempty"`
 	OnlineOnly              string               `xml:"online_only,omitempty" json:"online_only,omitempty"`
-	Ecotax                  string               `xml:"ecotax,omitempty" json:"ecotax,omitempty"`
+	Ecotax                  float64              `xml:"ecotax,omitempty" json:"ecotax,omitempty"`
 	MinimalQuantity         int                  `xml:"minimal_quantity,omitempty" json:"minimal_quantity,omitempty"`
 	LowStockThreshold       int                  `xml:"low_stock_threshold,omitempty" json:"low_stock_threshold,omitempty"`
 	LowStockAlert           string               `xml:"low_stock_alert,omitempty" json:"low_stock_alert,omitempty"`
-	Price                   string               `xml:"price,omitempty" json:"price,omitempty"`
-	WholesalePrice          string               `xml:"wholesale_price,omitempty" json:"wholesale_price,omitempty"`
+	Price                   float64              `xml:"price,omitempty" json:"price,omitempty"`
+	WholesalePrice          float64              `xml:"wholesale_price,omitempty" json:"wholesale_price,omitempty"`
 	Unity                   string               `xml:"unity,omitempty" json:"unity,omitempty"`
-	UnitPrice               string               `xml:"unit_price,omitempty" json:"unit_price,omitempty"`
-	UnitPriceRatio          string               `xml:"unit_price_ratio,omitempty" json:"unit_price_ratio,omitempty"`
-	AdditionalShippingCost  string               `xml:"additional_shipping_cost,omitempty" json:"additional_shipping_cost,omitempty"`
+	UnitPrice               float64              `xml:"unit_price,omitempty" json:"unit_price,omitempty"`
+	UnitPriceRatio          float64              `xml:"unit_price_ratio,omitempty" json:"unit_price_ratio,omitempty"`
+	AdditionalShippingCost  float64              `xml:"additional_shipping_cost,omitempty" json:"additional_shipping_cost,omitempty"`
 	Customizable            int                  `xml:"customizable,omitempty" json:"customizable,omitempty"`
 	TextFields              int                  `xml:"text_fields,omitempty" json:"text_fields,omitempty"`
 	UploadableFiles         int                  `xml:"uploadable_files,omitempty" json:"uploadable_files,omitempty"`
@@ -251,7 +251,7 @@ func GetProductLanguageValueByID(languageID int, languageData *ProductLanguageDa
 			languageValue = language.Value
 			languageFound = true
 
-			break;
+			break
 		}
 	}
 

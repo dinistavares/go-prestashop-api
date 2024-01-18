@@ -48,25 +48,25 @@ type Order struct {
 	Gift                  string             `xml:"gift,omitempty" json:"gift,omitempty"`
 	GiftMessage           string             `xml:"gift_message,omitempty" json:"gift_message,omitempty"`
 	MobileTheme           string             `xml:"mobile_theme,omitempty" json:"mobile_theme,omitempty"`
-	TotalDiscounts        string             `xml:"total_discounts,omitempty" json:"total_discounts,omitempty"`
-	TotalDiscountsTaxIncl string             `xml:"total_discounts_tax_incl,omitempty" json:"total_discounts_tax_incl,omitempty"`
-	TotalDiscountsTaxExcl string             `xml:"total_discounts_tax_excl,omitempty" json:"total_discounts_tax_excl,omitempty"`
-	TotalPaid             string             `xml:"total_paid,omitempty" json:"total_paid,omitempty"`
-	TotalPaidTaxIncl      string             `xml:"total_paid_tax_incl,omitempty" json:"total_paid_tax_incl,omitempty"`
-	TotalPaidTaxExcl      string             `xml:"total_paid_tax_excl,omitempty" json:"total_paid_tax_excl,omitempty"`
-	TotalPaidReal         string             `xml:"total_paid_real,omitempty" json:"total_paid_real,omitempty"`
-	TotalProducts         string             `xml:"total_products,omitempty" json:"total_products,omitempty"`
-	TotalProductsWt       string             `xml:"total_products_wt,omitempty" json:"total_products_wt,omitempty"`
-	TotalShipping         string             `xml:"total_shipping,omitempty" json:"total_shipping,omitempty"`
-	TotalShippingTaxIncl  string             `xml:"total_shipping_tax_incl,omitempty" json:"total_shipping_tax_incl,omitempty"`
-	TotalShippingTaxExcl  string             `xml:"total_shipping_tax_excl,omitempty" json:"total_shipping_tax_excl,omitempty"`
-	CarrierTaxRate        string             `xml:"carrier_tax_rate,omitempty" json:"carrier_tax_rate,omitempty"`
-	TotalWrapping         string             `xml:"total_wrapping,omitempty" json:"total_wrapping,omitempty"`
-	TotalWrappingTaxIncl  string             `xml:"total_wrapping_tax_incl,omitempty" json:"total_wrapping_tax_incl,omitempty"`
-	TotalWrappingTaxExcl  string             `xml:"total_wrapping_tax_excl,omitempty" json:"total_wrapping_tax_excl,omitempty"`
+	TotalDiscounts        float64            `xml:"total_discounts,omitempty" json:"total_discounts,omitempty"`
+	TotalDiscountsTaxIncl float64            `xml:"total_discounts_tax_incl,omitempty" json:"total_discounts_tax_incl,omitempty"`
+	TotalDiscountsTaxExcl float64            `xml:"total_discounts_tax_excl,omitempty" json:"total_discounts_tax_excl,omitempty"`
+	TotalPaid             float64            `xml:"total_paid,omitempty" json:"total_paid,omitempty"`
+	TotalPaidTaxIncl      float64            `xml:"total_paid_tax_incl,omitempty" json:"total_paid_tax_incl,omitempty"`
+	TotalPaidTaxExcl      float64            `xml:"total_paid_tax_excl,omitempty" json:"total_paid_tax_excl,omitempty"`
+	TotalPaidReal         float64            `xml:"total_paid_real,omitempty" json:"total_paid_real,omitempty"`
+	TotalProducts         float64            `xml:"total_products,omitempty" json:"total_products,omitempty"`
+	TotalProductsWt       float64            `xml:"total_products_wt,omitempty" json:"total_products_wt,omitempty"`
+	TotalShipping         float64            `xml:"total_shipping,omitempty" json:"total_shipping,omitempty"`
+	TotalShippingTaxIncl  float64            `xml:"total_shipping_tax_incl,omitempty" json:"total_shipping_tax_incl,omitempty"`
+	TotalShippingTaxExcl  float64            `xml:"total_shipping_tax_excl,omitempty" json:"total_shipping_tax_excl,omitempty"`
+	CarrierTaxRate        float64            `xml:"carrier_tax_rate,omitempty" json:"carrier_tax_rate,omitempty"`
+	TotalWrapping         float64            `xml:"total_wrapping,omitempty" json:"total_wrapping,omitempty"`
+	TotalWrappingTaxIncl  float64            `xml:"total_wrapping_tax_incl,omitempty" json:"total_wrapping_tax_incl,omitempty"`
+	TotalWrappingTaxExcl  float64            `xml:"total_wrapping_tax_excl,omitempty" json:"total_wrapping_tax_excl,omitempty"`
 	RoundMode             int                `xml:"round_mode,omitempty" json:"round_mode,omitempty"`
 	RoundType             int                `xml:"round_type,omitempty" json:"round_type,omitempty"`
-	ConversionRate        string             `xml:"conversion_rate,omitempty" json:"conversion_rate,omitempty"`
+	ConversionRate        float64            `xml:"conversion_rate,omitempty" json:"conversion_rate,omitempty"`
 	Reference             string             `xml:"reference,omitempty" json:"reference,omitempty"`
 	Associations          *OrderAssociations `xml:"associations,omitempty" json:"associations,omitempty"`
 }
