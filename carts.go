@@ -52,11 +52,7 @@ type CartRow struct {
 }
 
 type CartAssociations struct {
-	CartRows *[]CartRows `xml:"cart_rows,omitempty" json:"cart_rows,omitempty"`
-}
-
-type CartRows struct {
-	CartRow []CartRow `xml:"cart_row" json:"cart_row,omitempty"`
+	CartRows *[]CartRow `xml:"cart_rows>cart_row,omitempty" json:"cart_rows,omitempty"`
 }
 
 func (service *CartService) Create(cart *Cart) (*Cart, *http.Response, error) {
@@ -145,14 +141,23 @@ func (service *CartService) ListCartsByCustomerID(customerID int, params *Servic
 			Values:   []string{fmt.Sprintf("%d", customerID)},
 			Operator: ListFilterOperatorLiteral,
 		},
-		// Set defined sort and limit params
-		Limit: params.Limit,
-		Sort:  params.Sort,
 	}
 
-	// Override display params
-	if params.Display != nil {
-		searchParams.Display = params.Display
+	if params != nil {
+		// Override display params
+		if params.Display != nil {
+			searchParams.Display = params.Display
+		}
+	
+		// Set limits if defined
+		if params.Limit != nil {
+			searchParams.Limit = params.Limit
+		}
+	
+		// Set sort order if defined
+		if params.Sort != nil {
+			searchParams.Sort = params.Sort
+		}
 	}
 
 	carts, response, err := service.List(&searchParams)
