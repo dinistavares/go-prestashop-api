@@ -72,19 +72,19 @@ type Order struct {
 }
 
 type OrderRow struct {
-	ID                 int    `xml:"id,omitempty" json:"id,omitempty"`
-	ProductID          int    `xml:"product_id,omitempty" json:"product_id,omitempty"`
-	ProductAttributeID int    `xml:"product_attribute_id,omitempty" json:"product_attribute_id,omitempty"`
-	ProductQuantity    int    `xml:"product_quantity,omitempty" json:"product_quantity,omitempty"`
-	ProductName        string `xml:"product_name,omitempty" json:"product_name,omitempty"`
-	ProductReference   string `xml:"product_reference,omitempty" json:"product_reference,omitempty"`
-	ProductEan13       string `xml:"product_ean13,omitempty" json:"product_ean13,omitempty"`
-	ProductIsbn        string `xml:"product_isbn,omitempty" json:"product_isbn,omitempty"`
-	ProductUpc         string `xml:"product_upc,omitempty" json:"product_upc,omitempty"`
-	ProductPrice       string `xml:"product_price,omitempty" json:"product_price,omitempty"`
-	IDCustomization    int    `xml:"id_customization,omitempty" json:"id_customization,omitempty"`
-	UnitPriceTaxIncl   string `xml:"unit_price_tax_incl,omitempty" json:"unit_price_tax_incl,omitempty"`
-	UnitPriceTaxExcl   string `xml:"unit_price_tax_excl,omitempty" json:"unit_price_tax_excl,omitempty"`
+	ID                 int     `xml:"id,omitempty" json:"id,omitempty"`
+	ProductID          int     `xml:"product_id,omitempty" json:"product_id,omitempty"`
+	ProductAttributeID int     `xml:"product_attribute_id,omitempty" json:"product_attribute_id,omitempty"`
+	ProductQuantity    int     `xml:"product_quantity,omitempty" json:"product_quantity,omitempty"`
+	ProductName        string  `xml:"product_name,omitempty" json:"product_name,omitempty"`
+	ProductReference   string  `xml:"product_reference,omitempty" json:"product_reference,omitempty"`
+	ProductEan13       string  `xml:"product_ean13,omitempty" json:"product_ean13,omitempty"`
+	ProductIsbn        string  `xml:"product_isbn,omitempty" json:"product_isbn,omitempty"`
+	ProductUpc         string  `xml:"product_upc,omitempty" json:"product_upc,omitempty"`
+	ProductPrice       string  `xml:"product_price,omitempty" json:"product_price,omitempty"`
+	IDCustomization    int     `xml:"id_customization,omitempty" json:"id_customization,omitempty"`
+	UnitPriceTaxIncl   float64 `xml:"unit_price_tax_incl,omitempty" json:"unit_price_tax_incl,omitempty"`
+	UnitPriceTaxExcl   float64 `xml:"unit_price_tax_excl,omitempty" json:"unit_price_tax_excl,omitempty"`
 }
 
 type OrderAssociations struct {
