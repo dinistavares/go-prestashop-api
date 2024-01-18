@@ -2,6 +2,7 @@ package prestashop
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -20,6 +21,11 @@ type ProductData struct {
 	Products *[]Product `xml:"product,omitempty" json:"product,omitempty"`
 }
 
+type DefaultImage struct {
+	ID   int    `xml:",chardata" json:"id,omitempty"`
+	Href string `xml:"href,attr" json:"image_url,omitempty"`
+}
+
 type Product struct {
 	ID                      int                  `xml:"id,omitempty" json:"id,omitempty"`
 	IDManufacturer          int                  `xml:"id_manufacturer,omitempty" json:"id_manufacturer,omitempty"`
@@ -27,7 +33,7 @@ type Product struct {
 	IDCategoryDefault       int                  `xml:"id_category_default,omitempty" json:"id_category_default,omitempty"`
 	New                     interface{}          `xml:"new,omitempty" json:"new,omitempty"`
 	CacheDefaultAttribute   int                  `xml:"cache_default_attribute,omitempty" json:"cache_default_attribute,omitempty"`
-	IDDefaultImage          int                  `xml:"id_default_image,omitempty" json:"id_default_image,omitempty"`
+	DefaultImage          	*DefaultImage    	   `xml:"id_default_image,omitempty" json:"id_default_image,omitempty"`
 	IDDefaultCombination    int                  `xml:"id_default_combination,omitempty" json:"id_default_combination,omitempty"`
 	IDTaxRulesGroup         int                  `xml:"id_tax_rules_group,omitempty" json:"id_tax_rules_group,omitempty"`
 	PositionInCategory      int                  `xml:"position_in_category,omitempty" json:"position_in_category,omitempty"`
@@ -88,7 +94,7 @@ type Product struct {
 	MetaKeywords            *ProductLanguageData `xml:"meta_keywords,omitempty" json:"meta_keywords,omitempty"`
 	MetaTitle               *ProductLanguageData `xml:"meta_title,omitempty" json:"meta_title,omitempty"`
 	LinkRewrite             *ProductLanguageData `xml:"link_rewrite,omitempty" json:"link_rewrite,omitempty"`
-	Name                    *ProductLanguageData `xml:"name,omitempty" json:"name,omitempty"`
+	Names                   *ProductLanguageData `xml:"name,omitempty" json:"name,omitempty"`
 	Description             *ProductLanguageData `xml:"description,omitempty" json:"description,omitempty"`
 	DescriptionShort        *ProductLanguageData `xml:"description_short,omitempty" json:"description_short,omitempty"`
 	AvailableNow            *ProductLanguageData `xml:"available_now,omitempty" json:"available_now,omitempty"`
@@ -96,14 +102,15 @@ type Product struct {
 	Associations            *ProductAssociations `xml:"associations,omitempty" json:"associations,omitempty"`
 }
 
+// TODO: fix  associations
 type ProductLanguageData struct {
 	Language *[]ProductLanguage `xml:"language,omitempty" json:"language,omitempty"`
 }
 
 type ProductLanguage struct {
-	ID   string `xml:"id,attr" json:"id,omitempty"`
-	Href string `xml:"href,attr" json:"href,omitempty"`
-	Text string `xml:",chardata" json:"text,omitempty"`
+	ID    int    `xml:"id,attr" json:"id,omitempty"`
+	Href  string `xml:"href,attr" json:"href,omitempty"`
+	Value string `xml:",chardata" json:"value,omitempty"`
 }
 
 type Categories struct {
@@ -132,13 +139,17 @@ type StockAvailables struct {
 	IDProductAttribute int `xml:"id_product_attribute,omitempty" json:"id_product_attribute,omitempty"`
 }
 
-type ProductAssociations struct {
+type ProductRow struct {
 	Categories          *[]Categories          `xml:"categories,omitempty" json:"categories,omitempty"`
 	Images              *[]Images              `xml:"images,omitempty" json:"images,omitempty"`
 	Combinations        *[]Combinations        `xml:"combinations,omitempty" json:"combinations,omitempty"`
 	ProductOptionValues *[]ProductOptionValues `xml:"product_option_values,omitempty" json:"product_option_values,omitempty"`
 	ProductFeatures     *[]ProductFeatures     `xml:"product_features,omitempty" json:"product_features,omitempty"`
 	StockAvailables     *[]StockAvailables     `xml:"stock_availables,omitempty" json:"stock_availables,omitempty"`
+}
+
+type ProductAssociations struct {
+	ProductRows *[]ProductRow `xml:"product_rows>cart_row,omitempty" json:"cart_rows,omitempty"`
 }
 
 func (service *ProductService) Create(product *Product) (*Product, *http.Response, error) {
@@ -215,4 +226,38 @@ func (service *ProductService) List(params *ServiceListParams) (*[]Product, *htt
 	}
 
 	return products, response, nil
+}
+
+func GetDefaultProductLanguageValue(languageData *ProductLanguageData) (string, error) {
+	if languageData == nil || languageData.Language == nil || len(*languageData.Language) < 1 {
+		return "", errors.New("language data missing")
+	}
+
+	return (*languageData.Language)[0].Value, nil
+}
+
+func GetProductLanguageValueByID(languageID int, languageData *ProductLanguageData) (string, error) {
+	var (
+		languageValue string
+		languageFound bool
+	)
+
+	if languageData == nil || languageData.Language == nil || len(*languageData.Language) == 0 {
+		return languageValue, errors.New("language data missing")
+	}
+
+	for _, language := range *languageData.Language {
+		if language.ID == languageID {
+			languageValue = language.Value
+			languageFound = true
+
+			break;
+		}
+	}
+
+	if languageFound == false {
+		return languageValue, errors.New("no langauge found")
+	}
+
+	return languageValue, nil
 }
