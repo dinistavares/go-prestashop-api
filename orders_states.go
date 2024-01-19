@@ -24,7 +24,7 @@ type OrderStates struct {
 	OrderState []OrderState `xml:"order_state,omitempty" json:"order_state,omitempty"`
 }
 
-type OrderState []struct {
+type OrderState struct {
 	ID          string        `xml:"id,omitempty" json:"id,omitempty"`
 	Unremovable string        `xml:"unremovable,omitempty" json:"unremovable,omitempty"`
 	Delivery    string        `xml:"delivery,omitempty" json:"delivery,omitempty"`
@@ -75,46 +75,46 @@ func (service *OrderStateService) Get(order_stateID int, params *ServiceListPara
 	_url := makeResourceUrl(resourceRoute, params)
 	req, _ := service.client.NewRequest("GET", _url, nil)
 
-	order_state := new(OrderState)
-	order_statesResponse := new(ResponseOrderState)
-	response, err := service.client.Do(req, order_statesResponse)
+	orderState := new(OrderState)
+	orderStatesResponse := new(ResponseOrderState)
+	response, err := service.client.Do(req, orderStatesResponse)
 
 	if err != nil {
 		return nil, response, err
 	}
 
-	if order_statesResponse != nil {
-		if order_statesResponse.OrderState != nil {
-			order_state = order_statesResponse.OrderState
+	if orderStatesResponse != nil {
+		if orderStatesResponse.OrderState != nil {
+			orderState = orderStatesResponse.OrderState
 		}
 
 		// Use fisrt matching order_state
-		if order_statesResponse.OrderStatesData != nil && order_statesResponse.OrderStatesData.OrderStates != nil &&
-			len(*order_statesResponse.OrderStatesData.OrderStates) > 0 {
-			order_state = &(*order_statesResponse.OrderStatesData.OrderStates)[0]
+		if orderStatesResponse.OrderStatesData != nil && orderStatesResponse.OrderStatesData.OrderStates != nil &&
+			len(*orderStatesResponse.OrderStatesData.OrderStates) > 0 {
+			orderState = &(*orderStatesResponse.OrderStatesData.OrderStates)[0]
 		}
 	}
 
-	return order_state, response, nil
+	return orderState, response, nil
 }
 
 func (service *OrderStateService) List(params *ServiceListParams) (*[]OrderState, *http.Response, error) {
-	order_states := new([]OrderState)
+	orderStates := new([]OrderState)
 	_url := makeResourceUrl("order_states", params)
 	req, _ := service.client.NewRequest("GET", _url, nil)
 
-	order_statesResponse := new(ResponseOrderState)
-	response, err := service.client.Do(req, order_statesResponse)
+	orderStatesResponse := new(ResponseOrderState)
+	response, err := service.client.Do(req, orderStatesResponse)
 
 	if err != nil {
 		return nil, response, err
 	}
 
-	if order_statesResponse != nil && order_statesResponse.OrderStatesData != nil &&
-		order_statesResponse.OrderStatesData.OrderStates != nil {
-		order_states = order_statesResponse.OrderStatesData.OrderStates
+	if orderStatesResponse != nil && orderStatesResponse.OrderStatesData != nil &&
+		orderStatesResponse.OrderStatesData.OrderStates != nil {
+		orderStates = orderStatesResponse.OrderStatesData.OrderStates
 	}
 
-	return order_states, response, nil
+	return orderStates, response, nil
 }
 
