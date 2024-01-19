@@ -42,12 +42,13 @@ type Client struct {
 	auth    *auth
 	baseURL *url.URL
 
-	Carrier  *CarrierService
-	Currency *CurrencyService
-	Customer *CustomersService
-	Cart     *CartService
-	Order    *OrderService
-	Product  *ProductService
+	Carrier    *CarrierService
+	Currency   *CurrencyService
+	Customer   *CustomersService
+	Cart       *CartService
+	Order      *OrderService
+	OrderState *OrderStateService
+	Product    *ProductService
 }
 
 type service struct {
@@ -121,6 +122,7 @@ func NewWithConfig(config *ClientConfig) (*Client, error) {
 	client.Customer = &CustomersService{client: client}
 	client.Cart = &CartService{client: client}
 	client.Order = &OrderService{client: client}
+	client.OrderState = &OrderStateService{client: client}
 	client.Product = &ProductService{client: client}
 
 	return client, nil
