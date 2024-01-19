@@ -1,6 +1,6 @@
 # go-prestashop-api
 
-A PrestaShop API Golang Wrapper for the [Prestashop Webservice API)](https://devdocs.prestashop-project.org/8/webservice/)
+A PrestaShop API Golang Wrapper for the [Prestashop Webservice API](https://devdocs.prestashop-project.org/8/webservice/)
 
 # Install
 
