@@ -165,15 +165,18 @@ func (service *CustomersService) GetCustomersByEmail(customerEmail string, param
 		},
 	}
 
-	// Set defined sort params
-	if params != nil && params.Sort != nil {
-		searchParams.Sort = params.Sort
+	if params != nil {
+		// Set defined sort params
+		if params.Sort != nil {
+			searchParams.Sort = params.Sort
+		}
+
+		// Override display params
+		if params.Display != nil {
+			searchParams.Display = params.Display
+		}
 	}
 
-	// Override display params
-	if params.Display != nil {
-		searchParams.Display = params.Display
-	}
 
 	customer := new(Customer)
 	customers, response, err := service.List(&searchParams)
