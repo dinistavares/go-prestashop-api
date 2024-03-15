@@ -163,8 +163,11 @@ func (service *CustomersService) GetCustomersByEmail(customerEmail string, param
 		Limit: &ServiceListLimit{
 			Limit: &searchLimit,
 		},
-		// Set defined sort params
-		Sort: params.Sort,
+	}
+
+	// Set defined sort params
+	if params.Sort != nil {
+		searchParams.Sort = params.Sort
 	}
 
 	// Override display params
