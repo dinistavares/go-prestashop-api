@@ -166,7 +166,7 @@ func (service *CustomersService) GetCustomersByEmail(customerEmail string, param
 	}
 
 	// Set defined sort params
-	if params.Sort != nil {
+	if params != nil && params.Sort != nil {
 		searchParams.Sort = params.Sort
 	}
 
