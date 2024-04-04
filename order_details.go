@@ -17,7 +17,7 @@ type ResponseOrderDetail struct {
 }
 
 type OrderDetailData struct {
-	OrderDetail *[]OrderDetail `xml:"order_details,omitempty" json:"order_details,omitempty"`
+	OrderDetail *[]OrderDetail `xml:"order_detail,omitempty" json:"order_details,omitempty"`
 }
 
 type OrderDetail struct {

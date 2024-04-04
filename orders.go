@@ -166,14 +166,14 @@ func (service *OrderService) List(params *ServiceListParams) (*[]Order, *http.Re
 	return orders, response, nil
 }
 
-func (service *OrderService) ListOrdersByCustomerID(customerID int, params *ServiceListParams) (*[]Order, *http.Response, error) {
+func (service *OrderService) ListOrdersByCustomerID(customerID string, params *ServiceListParams) (*[]Order, *http.Response, error) {
 	searchParams := ServiceListParams{
 		Display: &ServiceListDisplay{
 			"full",
 		},
 		Filter: &ServiceListFilter{
 			Key:      "id_customer",
-			Values:   []string{fmt.Sprintf("%d", customerID)},
+			Values:   []string{customerID},
 			Operator: ListFilterOperatorLiteral,
 		},
 	}
