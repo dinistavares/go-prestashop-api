@@ -177,7 +177,6 @@ func (service *CustomersService) GetCustomersByEmail(customerEmail string, param
 		}
 	}
 
-
 	customer := new(Customer)
 	customers, response, err := service.List(&searchParams)
 

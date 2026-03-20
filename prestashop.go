@@ -19,8 +19,6 @@ const (
 	userAgent                    = "go-prestashop-api/1.1"
 	clientRequestRetryAttempts   = 2
 	clientRequestRetryHoldMillis = 1000
-
-	defaultData
 )
 
 var errorDoAllAttemptsExhausted = errors.New("all request attempts were exhausted")

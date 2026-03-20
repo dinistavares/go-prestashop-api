@@ -117,4 +117,3 @@ func (service *OrderStateService) List(params *ServiceListParams) (*[]OrderState
 
 	return orderStates, response, nil
 }
-
