@@ -19,6 +19,7 @@ const (
 	userAgent                    = "go-prestashop-api/1.1"
 	clientRequestRetryAttempts   = 2
 	clientRequestRetryHoldMillis = 1000
+	clientTimeout                = 10
 )
 
 var errorDoAllAttemptsExhausted = errors.New("all request attempts were exhausted")
@@ -94,7 +95,6 @@ func New(shopURL string) (*Client, error) {
 	}
 
 	config := ClientConfig{
-		HttpClient:      http.DefaultClient,
 		RestEndpointURL: shopURL,
 	}
 
@@ -104,6 +104,11 @@ func New(shopURL string) (*Client, error) {
 func NewWithConfig(config *ClientConfig) (*Client, error) {
 	if config == nil {
 		return nil, errors.New("configuration is empty")
+	}
+
+	// Create client
+	config.HttpClient = &http.Client{
+		Timeout: time.Duration(clientTimeout * time.Second),
 	}
 
 	// Create client
