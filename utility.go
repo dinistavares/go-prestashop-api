@@ -44,6 +44,22 @@ func GetDefaultLanguageValue(languageData *LanguageData) (string, error) {
 	return (*languageData.Language)[0].Value, nil
 }
 
+func ResolveLanguageValue(languageID int, languageData *LanguageData) string {
+	if languageID > 0 {
+		if value, err := GetLanguageValueByID(languageID, languageData); err == nil {
+			return value
+		}
+	}
+
+	value, err := GetDefaultLanguageValue(languageData)
+
+	if err != nil {
+		return ""
+	}
+
+	return value
+}
+
 func GetLanguageValueByID(languageID int, languageData *LanguageData) (string, error) {
 	var (
 		languageValue string

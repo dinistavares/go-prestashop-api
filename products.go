@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // Product service
@@ -138,6 +139,53 @@ type ProductRow struct {
 
 type ProductAssociations struct {
 	ProductRows *[]ProductRow `xml:"product_rows>cart_row,omitempty" json:"cart_rows,omitempty"`
+}
+
+func (product *Product) LocalizedName(languageID int) string {
+	if product == nil {
+		return ""
+	}
+
+	return ResolveLanguageValue(languageID, product.Names)
+}
+
+func (product *Product) LocalizedShortDescription(languageID int) string {
+	if product == nil {
+		return ""
+	}
+
+	return ResolveLanguageValue(languageID, product.DescriptionShort)
+}
+
+func (product *Product) LinkURL(shopURL string, languageID int) string {
+	if product == nil || shopURL == "" {
+		return ""
+	}
+
+	shopURL = strings.TrimRight(shopURL, "/")
+	linkRewrite := ResolveLanguageValue(languageID, product.LinkRewrite)
+
+	if linkRewrite != "" {
+		return fmt.Sprintf("%s/%d-%s.html", shopURL, product.ID, linkRewrite)
+	}
+
+	return fmt.Sprintf("%s/index.php?controller=product&id_product=%d", shopURL, product.ID)
+}
+
+func (product *Product) CoverImageURL(shopURL string, languageID int) string {
+	if product == nil || shopURL == "" || product.DefaultImage == nil || product.DefaultImage.ID <= 0 {
+		return ""
+	}
+
+	shopURL = strings.TrimRight(shopURL, "/")
+	imageID := product.DefaultImage.ID
+	linkRewrite := ResolveLanguageValue(languageID, product.LinkRewrite)
+
+	if linkRewrite == "" {
+		linkRewrite = "product"
+	}
+
+	return fmt.Sprintf("%s/%d-home_default/%s.jpg", shopURL, imageID, linkRewrite)
 }
 
 func (service *ProductService) Create(product *Product) (*Product, *http.Response, error) {

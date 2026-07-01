@@ -43,6 +43,14 @@ type OrderState struct {
 	Template    *LanguageData `xml:"template,omitempty" json:"template,omitempty"`
 }
 
+func (orderState *OrderState) LocalizedName(languageID int) string {
+	if orderState == nil {
+		return ""
+	}
+
+	return ResolveLanguageValue(languageID, orderState.Name)
+}
+
 func (service *OrderStateService) Create(order_state *OrderState) (*OrderState, *http.Response, error) {
 	createdOrderState := new(OrderState)
 

@@ -41,21 +41,23 @@ type Client struct {
 	auth    *auth
 	baseURL *url.URL
 
-	Carrier     *CarrierService
-	Currency    *CurrencyService
-	Customer    *CustomersService
-	Cart        *CartService
-	Order       *OrderService
-	OrderDetail *OrderDetailService
-	OrderState  *OrderStateService
-	Product     *ProductService
+	Carrier      *CarrierService
+	Currency     *CurrencyService
+	Customer     *CustomersService
+	Cart         *CartService
+	Order        *OrderService
+	OrderCarrier *OrderCarrierService
+	OrderDetail  *OrderDetailService
+	OrderState   *OrderStateService
+	Product      *ProductService
 }
 
 type service struct {
 	client *Client
 }
 
-type errorResponse struct {
+// APIError represents an error returned by the PrestaShop webservice (eg. HTTP 4xx/5xx).
+type APIError struct {
 	XMLName xml.Name `xml:"prestashop"`
 	Xlink   string   `xml:"xlink,attr"`
 
@@ -74,7 +76,7 @@ type Error struct {
 	Message string `xml:"message" json:"message"`
 }
 
-func (response *errorResponse) Error() string {
+func (response *APIError) Error() string {
 	if response.Errors == nil && response.RawError != "" {
 		errorNew := Error{
 			Message: response.RawError,
@@ -126,11 +128,20 @@ func NewWithConfig(config *ClientConfig) (*Client, error) {
 	client.Customer = &CustomersService{client: client}
 	client.Cart = &CartService{client: client}
 	client.Order = &OrderService{client: client}
+	client.OrderCarrier = &OrderCarrierService{client: client}
 	client.OrderDetail = &OrderDetailService{client: client}
 	client.OrderState = &OrderStateService{client: client}
 	client.Product = &ProductService{client: client}
 
 	return client, nil
+}
+
+func (client *Client) ShopURL() string {
+	if client == nil || client.config == nil {
+		return ""
+	}
+
+	return strings.TrimRight(client.config.RestEndpointURL, "/")
 }
 
 // Authenticate saves authenitcation parameters for user
@@ -257,15 +268,15 @@ func checkResponse(response *http.Response) error {
 	}
 
 	// Map response error data (eg. HTTP 4xx)
-	errorResponse := &errorResponse{Response: response}
+	apiError := &APIError{Response: response}
 
 	data, err := io.ReadAll(response.Body)
 
 	if err == nil && data != nil {
-		xml.Unmarshal(data, errorResponse)
+		xml.Unmarshal(data, apiError)
 	}
 
-	errorResponse.RawError = string(data)
+	apiError.RawError = string(data)
 
-	return errorResponse
+	return apiError
 }
